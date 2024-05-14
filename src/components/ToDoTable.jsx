@@ -2,7 +2,7 @@ import { useState } from "react";
 
 
 export default function ToDoTable() {
-    const TASKS = [
+    let TASKS = [
         {
           dueDate: "2024-03-30",
           completed: false,
@@ -56,19 +56,19 @@ export default function ToDoTable() {
       ];
 
       
-      const [filteredTasks, setFilteredTasks] = useState(TASKS)
+      const [searchText, setSearchText] = useState('')
 
-      const handleInputTextChange = (inputedText) => {
-         const filteredTasks = TASKS.filter((task) => {
-          task.name.toLowerCase().indexOf(inputedText.toLowerCase()) !== -1;
-        });
-        setFilteredTasks({filteredTasks})
-      };
+      
+      if (searchText) {
+        TASKS = TASKS.filter((task) => {
+           return task.name.toLowerCase().indexOf(searchText.toLowerCase()) !== -1;
+      });
+    }
 
       const [showCompleted, setShowCompleted] = useState(true)
 
 
-      const tasksMap = filteredTasks.map(
+      const tasksMap = TASKS.map(
         (task) =>
           task.completed ? (
             <tr key={task.name} >
@@ -106,7 +106,7 @@ export default function ToDoTable() {
     return (
     <>
       <div>
-        <input type="text" placeholder="Search..." onChange={(e)=>handleInputTextChange(e.target.value)} />
+        <input type="text" placeholder="Search..." onChange={(e)=>setSearchText(e.target.value.trim())} />
         <label>
           <input type="checkbox" onClick={()=>setShowCompleted(!showCompleted)} />
           Show completed tasks
